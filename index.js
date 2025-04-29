@@ -9,6 +9,12 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Database
+
+const db = require("./config/database")
+const connection = require("./models")
+connection.syncDB()
+
 // Routes
 const routes = require('./routes');
 app.use('/api', routes);
@@ -20,22 +26,30 @@ app.use((err, req, res, next) => {
 });
 
 // Database connection and server start
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
-sequelize.authenticate()
-  .then(() => {
-    console.log('Database connection established successfully.');
-    return sequelize.sync({ force: false }); // Set force: true to drop tables and recreate (for development)
-  })
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-      console.log(`API available at http://localhost:${PORT}/api`);
-    });
-  })
-  .catch(err => {
-    console.error('Unable to connect to the database:', err);
-    process.exit(1);
-  });
+app.get("/" , (req,res) => {
+    res.send("Welcome to the Volo - Connect");
+})
 
-module.exports = app;
+app.listen(process.env.PORT, () => {
+    console.log(`Server running at http://localhost:${process.env.PORT}`);
+});
+
+
+
+// sequelize.authenticate()
+//   .then(() => {
+//     console.log('Database connection established successfully.');
+//     return sequelize.sync({ force: true }); // Set force: true to drop tables and recreate (for development)
+//   })
+//   .then(() => {
+//     app.listen(PORT, () => {
+//       console.log(`Server running on port ${PORT}`);
+//       console.log(`API available at http://localhost:${PORT}`);
+//     });
+//   })
+//   .catch(err => {
+//     console.error('Unable to connect to the database:', err);
+//     process.exit(1);
+//   });
