@@ -1,5 +1,5 @@
-const { Sequelize } = require('sequelize');
-const sequelize = require('../config/database');
+const { Sequelize, DataTypes } = require('sequelize');
+const { sequelize } = require('../config/database'); // Import the sequelize instance, not the module
 
 // Initialize models
 const UserModel = require('./User');
@@ -10,14 +10,14 @@ const QueryModel = require('./Query');
 const SkillModel = require('./Skill');
 const UserSkillModel = require('./UserSkill');
 
-// Create models
-const User = UserModel(sequelize, Sequelize.DataTypes);
-const Event = EventModel(sequelize, Sequelize.DataTypes);
-const Request = RequestModel(sequelize, Sequelize.DataTypes);
-const AssignedVolunteer = AssignedVolunteerModel(sequelize, Sequelize.DataTypes);
-const Query = QueryModel(sequelize, Sequelize.DataTypes);
-const Skill = SkillModel(sequelize, Sequelize.DataTypes);
-const UserSkill = UserSkillModel(sequelize, Sequelize.DataTypes);
+// Create models using the sequelize instance
+const User = UserModel(sequelize, DataTypes);
+const Event = EventModel(sequelize, DataTypes);
+const Request = RequestModel(sequelize, DataTypes);
+const AssignedVolunteer = AssignedVolunteerModel(sequelize, DataTypes);
+const Query = QueryModel(sequelize, DataTypes);
+const Skill = SkillModel(sequelize, DataTypes);
+const UserSkill = UserSkillModel(sequelize, DataTypes);
 
 // Define associations
 User.hasMany(Event, { foreignKey: 'faculty_id' });
@@ -56,8 +56,6 @@ async function syncDB() {
     console.error('Unable to connect to DB:', err);
   }
 }
-
-
 
 // Call it once from your main app (e.g. `server.js`)
 module.exports = {
